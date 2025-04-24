@@ -47,7 +47,8 @@ common_pathogen = intersect(rownames(table_htseq), names_gff_pathogen) # find po
 pathogen_table_htseq <- table_htseq[common_pathogen,] # extract pathogen quantification results
 pathogen_gff_match <- match(common_pathogen,names_gff_pathogen) # find positions of corresponding genes in gff file
 pathogen_table_htseq <- cbind(length = pathogen_gff@ranges@width[pathogen_gff_match],pathogen_table_htseq) # extract gene length from gff file and combine it with quantification table
-
+### FIX
+row.names(pathogen_table_htseq) = common_pathogen
 
 ### host
 names_gff_host <- mcols(host_gff)[gene_attribute][[1]] # extract gene names from gff file
@@ -84,6 +85,8 @@ rename_add_NumReads <- function(x) {
   paste(x,"_NumReads",sep='')
 }
 
+# FIX for data frame 
+htseq_table_with_gene_length = data.frame(htseq_table_with_gene_length)
 
 # calculate TPMs for each gene in each sample
 TPMs <- apply(htseq_table_with_gene_length[2:dim(htseq_table_with_gene_length)[2]], 2, function(x) tpm(x, htseq_table_with_gene_length$length))
