@@ -25,8 +25,10 @@ def combine_annotations_quant(quantification_table, annotations_table, gene_attr
     # read annotations 
     annotations = pd.read_csv(annotations_table,sep="\t",index_col=0, dtype='str')
     # FIX:: remove null rows
-    if annotations['name'].isnull().sum()  > 0:
+    if 'name' in annotations.columns and annotations['name'].isnull().sum()  > 0:
         annotations = annotations[~annotations['name'].isnull()]
+    if 'gene_name' in annotations.columns and annotations['gene_name'].isnull().sum()  > 0:
+        annotations = annotations[~annotations['gene_name'].isnull()]
     # combine annotations and quantification results
     quant_merged_table = pd.concat([annotations, quantification], axis=1, join = 'inner').sort_index()
     quant_merged_table.index.names = [gene_attribute] 
